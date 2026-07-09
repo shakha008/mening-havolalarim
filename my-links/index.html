@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mening Havolalarim</title>
+    <!-- Ikonkalar uchun FontAwesome ulanishi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS: Dizayn va telefon ekraniga moslashuvchanlik */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* Asosiy o'rta qism (Konteyner) */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Profil rasmi dizayni */
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .bio {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* Tugmalar qutisi */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Har bir havola tugmasi */
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Ikonkalarni chap tomonga qadash va rang berish */
+        .link-btn i {
+            position: absolute;
+            left: 20px;
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Tugma ustiga sichqoncha borgandagi umumiy effekt */
+        .link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Har bir brend uchun alohida ikonka va matn ranglari (Sichqoncha borganda) */
+        .telegram:hover { 
+            color: #0088cc; 
+            border: 1px solid #0088cc;
+        }
+        .telegram:hover i { color: #0088cc; }
+
+        .youtube:hover { 
+            color: #ff0000; 
+            border: 1px solid #ff0000;
+        }
+        .youtube:hover i { color: #ff0000; }
+
+        .portfolio:hover { 
+            color: #27ae60; 
+            border: 1px solid #27ae60;
+        }
+        .portfolio:hover i { color: #27ae60; }
+
+        .instagram:hover { 
+            color: #E1306C; 
+            border: 1px solid #E1306C;
+        }
+        .instagram:hover i { color: #E1306C; }
+
+        /* Nusxa olish xabari (Toast) */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        .share-btn {
+            margin-top: 30px;
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .share-btn:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Profil qismi -->
+        <img src="photo_2026-07-09_10-46-02.jpg" alt="Profil Rasmi" class="profile-img">
+        <h1 class="name">@ismingiz</h1>
+        <p class="bio">Web Dasturchi | Dizayner 👇</p>
+
+        <!-- Havolalar qismi -->
+        <div class="links">
+            <a href="https://t.me/Mobilografsamarqand" class="link-btn telegram">
+                <i class="fab fa-telegram"></i> Telegram Kanalim
+            </a>
+            <a href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" class="link-btn youtube">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            <a href="https://t.me/RUSTAMOV016" class="link-btn portfolio">
+                <i class="fab fa-telegram-plane"></i> Telegram orqali bog'lanish
+            </a>
+            <a href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" class="link-btn instagram">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+
+        <!-- Ulashish tugmasi -->
+        <button class="share-btn" onclick="copyLink()">
+            <i class="fas fa-share-alt"></i> Sahifa manzilini nusxalash
+        </button>
+    </div>
+
+    <!-- Ekranda chiqadigan xabar -->
+    <div id="toast">Havola nusxalandi! 📋</div>
+
+    <!-- JavaScript: Havolani nusxalash funksiyasi -->
+    <script>
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const toast = document.getElementById("toast");
+                toast.className = "show";
+                
+                setTimeout(() => { 
+                    toast.className = toast.className.replace("show", ""); 
+                }, 3000);
+            }).catch(err => {
+                console.error("Nusxalashda xatolik yuz berdi", err);
+            });
+        }
+    </script>
+</body>
+</html>
