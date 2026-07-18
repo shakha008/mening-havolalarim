@@ -3,53 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaxzod Rustamov | Kiber Portfoliom</title>
+    <title>Shaxzod Rustamov | Viewfinder</title>
     <!-- FontAwesome Ikonkalari -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <!-- Shriftlar: qo'lyozma ruhidagi serif + geometrik sans + kamera-HUD monospace -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
-        /* Umumiy sozlamalar */
+        /* ============ TOKENLAR ============ */
+        :root {
+            --void: #090C1A;
+            --deep: #10182F;
+            --turquoise: #1FA6A0;
+            --gold: #C9A24B;
+            --ivory: #EFE6D3;
+            --terracotta: #8C3B3B;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: #05020f;
-            color: #ffffff;
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--void);
+            color: var(--ivory);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
             overflow: hidden;
             position: relative;
         }
 
-        /* 3D Canvas va Orqa fon rasmi uchun qatlam */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+        /* ============ FON QATLAMLARI ============ */
 
-        /* Sichqoncha quyrug'i (Trail) uchun canvas */
-        #trail-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
+        /* Xiralashgan profil surati - chuqurlik uchun */
         .bg-blur-image {
             position: fixed;
             top: -10%;
@@ -59,277 +52,390 @@
             background-image: url('photo_2026-07-09_10-46-02.jpg');
             background-size: cover;
             background-position: center;
-            filter: blur(50px) brightness(0.2) saturate(1.8);
-            z-index: -1;
+            filter: blur(60px) brightness(0.18) saturate(1.3) sepia(0.15);
+            z-index: -3;
             transform: scale(1.05);
-            transition: transform 0.3s ease-out;
+            transition: transform 0.4s ease-out;
         }
 
-        /* Asosiy Shishasimon (Glassmorphism) Konteyner */
-        .container {
+        /* Samarqand koshinlariga xos sakkiz qirrali yulduz naqshi (SVG pattern) */
+        #tile-pattern {
+            position: fixed;
+            inset: -20%;
+            width: 140%;
+            height: 140%;
+            z-index: -2;
+            opacity: 0.16;
+            animation: driftPattern 90s linear infinite;
+        }
+
+        @keyframes driftPattern {
+            0%   { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-4%, -3%) rotate(1.5deg); }
+        }
+
+        /* Zarra ("chang zarralari" / film grain) uchun canvas */
+        #dust-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ============ VIEWFINDER RAMKA (imzo elementi) ============ */
+        .viewfinder {
+            position: relative;
             width: 100%;
             max-width: 420px;
-            text-align: center;
-            background: rgba(7, 4, 20, 0.55);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 32px;
-            padding: 40px 25px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2);
-            z-index: 2;
-            position: relative;
         }
 
-        /* Profil hududi va pulsatsiyalanuvchi kiber-halqa */
+        .bracket {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--gold);
+            opacity: 0.85;
+            z-index: 3;
+        }
+        .bracket.tl { top: -10px; left: -10px; border-right: none; border-bottom: none; }
+        .bracket.tr { top: -10px; right: -10px; border-left: none; border-bottom: none; }
+        .bracket.bl { bottom: -10px; left: -10px; border-right: none; border-top: none; }
+        .bracket.br { bottom: -10px; right: -10px; border-left: none; border-top: none; }
+
+        /* Kamera HUD - qizil nuqta va yorliq */
+        .hud-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--turquoise);
+            padding: 0 4px 14px;
+            opacity: 0.85;
+        }
+        .hud-rec {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--terracotta);
+        }
+        .hud-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--terracotta);
+            animation: blinkDot 1.6s ease-in-out infinite;
+        }
+        @keyframes blinkDot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        /* Asosiy quti - iris ochilish animatsiyasi bilan */
+        .container {
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(16,24,47,0.82), rgba(9,12,26,0.9));
+            border: 1px solid rgba(201, 162, 75, 0.25);
+            padding: 34px 26px 30px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            position: relative;
+            clip-path: circle(0% at 50% 38%);
+            animation: irisOpen 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        }
+
+        @keyframes irisOpen {
+            to { clip-path: circle(85% at 50% 38%); }
+        }
+
+        /* Nozik ichki ramka chizig'i - koshin bezagi uslubida */
+        .container::before {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(31, 166, 160, 0.25);
+            pointer-events: none;
+        }
+
+        /* ============ PROFIL / FOKUS HALQASI ============ */
         .profile-wrapper {
             position: relative;
-            width: 130px;
-            height: 130px;
-            margin: 10px auto 20px;
+            width: 120px;
+            height: 120px;
+            margin: 4px auto 22px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         .profile-img {
-            width: 110px;
-            height: 110px;
+            width: 104px;
+            height: 104px;
             border-radius: 50%;
             object-fit: cover;
             z-index: 2;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 0 4px rgba(9,12,26,0.9), 0 0 30px rgba(201,162,75,0.25);
         }
 
-        .pulse-ring {
+        /* Avtofokus "snap" halqasi - neon pulsatsiya o'rniga */
+        .focus-ring {
             position: absolute;
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 2px solid #00f0ff;
-            animation: pulse 2.5s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+            border: 1px solid var(--turquoise);
             z-index: 1;
+            animation: focusSnap 5s ease-out infinite;
+        }
+        @keyframes focusSnap {
+            0%   { transform: scale(1.6); opacity: 0; filter: blur(4px); }
+            12%  { transform: scale(1);   opacity: 0.9; filter: blur(0); }
+            22%  { transform: scale(1.04); opacity: 0.6; }
+            30%  { transform: scale(1); opacity: 0.45; }
+            85%  { opacity: 0.45; }
+            100% { transform: scale(1.6); opacity: 0; filter: blur(4px); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(0.85); opacity: 1; }
-            100% { transform: scale(1.25); opacity: 0; border-color: #ff007f; }
-        }
-
-        /* Ism uchun neon gradient effekti */
+        /* Ism - qo'lyozma ruhidagi serif */
         .name {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.1rem;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            margin-bottom: 6px;
-            background: linear-gradient(45deg, #00f0ff, #ff007f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            margin-bottom: 4px;
+            color: var(--ivory);
+        }
+        .name span {
+            color: var(--gold);
         }
 
-        /* Gologrammali Typewriter Matni */
+        /* Typewriter matni */
         .typewriter-container {
             height: 20px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
         .bio-dynamic {
-            font-size: 0.95rem;
-            color: #00f0ff;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-            border-right: 2px solid #ff007f;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--turquoise);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-right: 2px solid var(--gold);
             white-space: nowrap;
             animation: blink 0.75s step-end infinite;
         }
         @keyframes blink {
             from, to { border-color: transparent }
-            50% { border-color: #ff007f; }
+            50% { border-color: var(--gold); }
         }
 
-        /* Havolalar qutisi */
+        /* ============ HAVOLALAR ============ */
         .links {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
-        /* Kiber Neon Tugmalar */
         .link-btn {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
+            background: rgba(239, 230, 211, 0.03);
+            color: var(--ivory);
             text-decoration: none;
             padding: 14px 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(239, 230, 211, 0.1);
+            border-left: 3px solid transparent;
+            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(5px);
         }
 
         .btn-title {
             font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
+            font-size: 0.98rem;
+            letter-spacing: 0.4px;
         }
 
-        /* Ijtimoiy statistika matni */
         .btn-stats {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.4);
-            margin-top: 3px;
-            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: rgba(239, 230, 211, 0.4);
+            margin-top: 4px;
+            font-weight: 400;
+            letter-spacing: 1px;
             transition: color 0.3s;
         }
 
         .link-btn i {
             position: absolute;
-            left: 24px;
-            font-size: 1.4rem;
+            left: 22px;
+            font-size: 1.25rem;
             transition: transform 0.3s ease;
+            opacity: 0.9;
         }
 
         .link-btn:hover {
-            transform: translateY(-4px) scale(1.02);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+            transform: translateX(2px);
+            background: rgba(239, 230, 211, 0.06);
         }
 
         .link-btn:hover i {
-            transform: scale(1.25) rotate(-10deg);
+            transform: scale(1.15);
         }
 
-        /* Neon Hover effektlari */
-        .telegram:hover { border-color: #0088cc; box-shadow: 0 0 25px rgba(0, 136, 204, 0.5); color: #0088cc; }
-        .telegram:hover .btn-stats { color: rgba(0, 136, 204, 0.8); }
-        
-        .youtube:hover { border-color: #ff0000; box-shadow: 0 0 25px rgba(255, 0, 0, 0.5); color: #ff0000; }
-        .youtube:hover .btn-stats { color: rgba(255, 0, 0, 0.8); }
+        .telegram:hover { border-left-color: #3AB0DE; color: #3AB0DE; }
+        .telegram:hover .btn-stats { color: rgba(58, 176, 222, 0.75); }
 
-        .portfolio:hover { border-color: #00ff88; box-shadow: 0 0 25px rgba(0, 255, 136, 0.5); color: #00ff88; }
-        .portfolio:hover .btn-stats { color: rgba(0, 255, 136, 0.8); }
+        .youtube:hover { border-left-color: #D9534F; color: #D9534F; }
+        .youtube:hover .btn-stats { color: rgba(217, 83, 79, 0.75); }
 
-        .instagram:hover { border-color: #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.5); color: #ff007f; }
-        .instagram:hover .btn-stats { color: rgba(255, 0, 127, 0.8); }
+        .portfolio:hover { border-left-color: var(--turquoise); color: var(--turquoise); }
+        .portfolio:hover .btn-stats { color: rgba(31, 166, 160, 0.75); }
+
+        .instagram:hover { border-left-color: var(--gold); color: var(--gold); }
+        .instagram:hover .btn-stats { color: rgba(201, 162, 75, 0.75); }
 
         /* Ulashish tugmasi */
         .share-btn {
-            margin-top: 30px;
+            margin-top: 26px;
             background: none;
             border: none;
-            color: #555;
+            color: rgba(239, 230, 211, 0.35);
             cursor: pointer;
-            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 9px;
             width: 100%;
             transition: color 0.3s;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
         .share-btn:hover {
-            color: #00f0ff;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+            color: var(--turquoise);
         }
 
         /* Toast bildirishnomasi */
         #toast {
             visibility: hidden;
             min-width: 220px;
-            background: rgba(7, 4, 20, 0.95);
-            color: #00f0ff;
-            border: 1px solid #00f0ff;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+            background: rgba(16, 24, 47, 0.97);
+            color: var(--turquoise);
+            border: 1px solid var(--turquoise);
+            box-shadow: 0 0 24px rgba(31, 166, 160, 0.3);
             text-align: center;
-            border-radius: 12px;
+            border-radius: 4px;
             padding: 14px;
             position: fixed;
             z-index: 10;
             bottom: -50px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 14px;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
         }
         #toast.show { visibility: visible; bottom: 40px; opacity: 1; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Xiralashgan interaktiv orqa fon rasmi -->
+    <!-- Xiralashgan orqa fon rasmi -->
     <div class="bg-blur-image" id="bg-img"></div>
 
-    <!-- Three.js 3D Zarrachalar foni -->
-    <canvas id="bg-canvas"></canvas>
+    <!-- Samarqand koshin naqshi -->
+    <svg id="tile-pattern" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="star8" width="72" height="72" patternUnits="userSpaceOnUse">
+                <g stroke="#C9A24B" stroke-width="1" fill="none">
+                    <path d="M36 4 L46 26 L68 36 L46 46 L36 68 L26 46 L4 36 L26 26 Z" />
+                    <circle cx="36" cy="36" r="10" stroke="#1FA6A0" />
+                </g>
+            </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#star8)" />
+    </svg>
 
-    <!-- Interaktiv sichqoncha nuri uchun canvas -->
-    <canvas id="trail-canvas"></canvas>
+    <!-- Chang zarralari (film grain) uchun canvas -->
+    <canvas id="dust-canvas"></canvas>
 
-    <div class="container">
-        <!-- Profil qismi -->
-        <div class="profile-wrapper">
-            <div class="pulse-ring"></div>
-            <img src="photo_2026-07-09_10-46-02.jpg" alt="Profil Rasmi" class="profile-img">
-        </div>
-        
-        <h1 class="name">Shaxzod Rustamov</h1>
-        
-        <!-- Dinamik yoziladigan matn -->
-        <div class="typewriter-container">
-            <span class="bio-dynamic" id="dynamic-text"></span>
-        </div>
+    <div class="viewfinder">
+        <div class="bracket tl"></div>
+        <div class="bracket tr"></div>
+        <div class="bracket bl"></div>
+        <div class="bracket br"></div>
 
-        <!-- Havolalar qismi -->
-        <div class="links">
-            <a href="https://t.me/Mobilografsamarqand" class="link-btn telegram" target="_blank">
-                <i class="fab fa-telegram"></i>
-                <span class="btn-title">Telegram Kanalim</span>
-                <span class="btn-stats">TELEGRAM PORTFOLIO</span>
-                
-            </a>
-            
-            <a href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" class="link-btn youtube" target="_blank">
-                <i class="fab fa-youtube"></i>
-                <span class="btn-title">YouTube Channel</span>
-                <span class="btn-stats">QIZIQISH UCHUN</span>
-                
-            </a>
-            
-            <a href="https://t.me/RUSTAMOV016" class="link-btn portfolio" target="_blank">
-                <i class="fab fa-telegram-plane"></i>
-                <span class="btn-title">Bog'lanish (Telegram)</span>
-                <span class="btn-stats">Xizmatlar va Hamkorlik uchun</span>
-            </a>
-            
-            <a href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" class="link-btn instagram" target="_blank">
-                <i class="fab fa-instagram"></i>
-                <span class="btn-title">INSTAGRAM</span>
-                <span class="btn-stats">FOTO VA VIDEO</span>
-            </a>
+        <div class="hud-strip">
+            <span class="hud-rec"><span class="hud-dot"></span>REC</span>
+            <span>SAMARQAND</span>
         </div>
 
-        <!-- Ulashish tugmasi -->
-        <button class="share-btn" onclick="copyLink()">
-            <i class="fas fa-share-alt"></i> Sahifa nusxasini olish
-        </button>
+        <div class="container">
+            <!-- Profil qismi -->
+            <div class="profile-wrapper">
+                <div class="focus-ring"></div>
+                <img src="photo_2026-07-09_10-46-02.jpg" alt="Profil Rasmi" class="profile-img">
+            </div>
+
+            <h1 class="name">Shaxzod <span>Rustamov</span></h1>
+
+            <!-- Dinamik yoziladigan matn -->
+            <div class="typewriter-container">
+                <span class="bio-dynamic" id="dynamic-text"></span>
+            </div>
+
+            <!-- Havolalar qismi -->
+            <div class="links">
+                <a href="https://t.me/Mobilografsamarqand" class="link-btn telegram" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    <span class="btn-title">Telegram Kanalim</span>
+                    <span class="btn-stats">TELEGRAM PORTFOLIO</span>
+                </a>
+
+                <a href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" class="link-btn youtube" target="_blank">
+                    <i class="fab fa-youtube"></i>
+                    <span class="btn-title">YouTube Channel</span>
+                    <span class="btn-stats">QIZIQISH UCHUN</span>
+                </a>
+
+                <a href="https://t.me/RUSTAMOV016" class="link-btn portfolio" target="_blank">
+                    <i class="fab fa-telegram-plane"></i>
+                    <span class="btn-title">Bog'lanish (Telegram)</span>
+                    <span class="btn-stats">Xizmatlar va Hamkorlik uchun</span>
+                </a>
+
+                <a href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" class="link-btn instagram" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                    <span class="btn-title">INSTAGRAM</span>
+                    <span class="btn-stats">FOTO VA VIDEO</span>
+                </a>
+            </div>
+
+            <!-- Ulashish tugmasi -->
+            <button class="share-btn" onclick="copyLink()">
+                <i class="fas fa-share-alt"></i> Sahifa nusxasini olish
+            </button>
+        </div>
     </div>
 
     <div id="toast"><i class="fas fa-check-circle"></i> TIZIM: Havola nusxalandi!</div>
-
-    <!-- Three.js Kutubxonasi -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
         // 1. SAHIFA LINKINI NUSXALASH
@@ -379,134 +485,77 @@
 
         // 3. PARALLAX EFFEKTI (FON RASMI UCHUN)
         const bgImg = document.getElementById('bg-img');
+        const tilePattern = document.getElementById('tile-pattern');
         let mouseX = 0, mouseY = 0;
 
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX - window.innerWidth / 2) / 45;
             mouseY = (e.clientY - window.innerHeight / 2) / 45;
             bgImg.style.transform = `translate(${-mouseX}px, ${-mouseY}px) scale(1.05)`;
+            tilePattern.style.transform = `translate(${-mouseX * 1.6}px, ${-mouseY * 1.6}px)`;
         });
 
-        // 4. THREE.JS 3D KOSMIK ZARRACHALAR
-        const canvas = document.querySelector('#bg-canvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        // 4. CHANG ZARRALARI (FILM GRAIN / LIGHT-LEAK TRAIL)
+        const dustCanvas = document.getElementById('dust-canvas');
+        const ctx = dustCanvas.getContext('2d');
+        let motes = [];
 
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 150; 
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for (let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 12;
+        function resizeDustCanvas() {
+            dustCanvas.width = window.innerWidth;
+            dustCanvas.height = window.innerHeight;
         }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        window.addEventListener('resize', resizeDustCanvas);
+        resizeDustCanvas();
 
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.035,
-            color: 0x00f0ff,
-            transparent: true,
-            opacity: 0.65,
-            blending: THREE.AdditiveBlending
-        });
-
-        const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particleMesh);
-
-        let targetX = 0, targetY = 0;
-        window.addEventListener('mousemove', (event) => {
-            targetX = (event.clientX - window.innerWidth / 2) * 0.0008;
-            targetY = (event.clientY - window.innerHeight / 2) * 0.0008;
-        });
-
-        // 5. SICHQONCHA ORTIDAN ERGASHUVCHI NEON TRAIL (INTERAKTIV QIDIRUV)
-        const trailCanvas = document.getElementById('trail-canvas');
-        const ctx = trailCanvas.getContext('2d');
-        let spots = [];
-        let hue = 180; // Cyan rangdan boshlanadi
-
-        function resizeTrailCanvas() {
-            trailCanvas.width = window.innerWidth;
-            trailCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', () => {
-            resizeTrailCanvas();
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        resizeTrailCanvas();
-
-        class Particle {
+        class Mote {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.size = Math.random() * 4 + 2;
-                this.speedX = Math.random() * 2 - 1;
-                this.speedY = Math.random() * 2 - 1;
-                this.color = `hsl(${hue}, 100%, 60%)`;
+                this.size = Math.random() * 2.5 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6 - 0.15;
+                this.life = 1;
+                this.gold = Math.random() > 0.5;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.size > 0.1) this.size -= 0.08;
+                this.life -= 0.012;
             }
             draw() {
-                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(this.life, 0) * 0.7;
+                ctx.fillStyle = this.gold ? '#C9A24B' : '#1FA6A0';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.globalAlpha = 1;
             }
         }
 
         window.addEventListener('mousemove', (e) => {
-            for (let i = 0; i < 3; i++) {
-                spots.push(new Particle(e.clientX, e.clientY));
-            }
-            hue = (hue + 1) % 360; // Rang o'zgarib turadi
-        });
-
-        // Sensorli ekranlar (Telefonlar) uchun trail effekti
-        window.addEventListener('touchmove', (e) => {
             for (let i = 0; i < 2; i++) {
-                spots.push(new Particle(e.touches[0].clientX, e.touches[0].clientY));
+                motes.push(new Mote(e.clientX, e.clientY));
             }
+            if (motes.length > 200) motes.splice(0, motes.length - 200);
         });
 
-        function handleParticles() {
-            for (let i = 0; i < spots.length; i++) {
-                spots[i].update();
-                spots[i].draw();
-                if (spots[i].size <= 0.3) {
-                    spots.splice(i, 1);
+        window.addEventListener('touchmove', (e) => {
+            motes.push(new Mote(e.touches[0].clientX, e.touches[0].clientY));
+        });
+
+        function animateDust() {
+            ctx.clearRect(0, 0, dustCanvas.width, dustCanvas.height);
+            for (let i = 0; i < motes.length; i++) {
+                motes[i].update();
+                motes[i].draw();
+                if (motes[i].life <= 0) {
+                    motes.splice(i, 1);
                     i--;
                 }
             }
+            requestAnimationFrame(animateDust);
         }
-
-        // Asosiy birlashtirilgan Render Loop
-        const clock = new THREE.Clock();
-        const animate = () => {
-            window.requestAnimationFrame(animate);
-            
-            // 2D Trail tozalash va chizish
-            ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
-            handleParticles();
-
-            // 3D Animatsiya
-            const elapsedTime = clock.getElapsedTime();
-            particleMesh.rotation.y = elapsedTime * 0.04;
-            particleMesh.rotation.x = elapsedTime * 0.015;
-            particleMesh.rotation.y += (targetX - particleMesh.rotation.y) * 0.1;
-            particleMesh.rotation.x += (-targetY - particleMesh.rotation.x) * 0.1;
-
-            renderer.render(scene, camera);
-        };
-        animate();
+        animateDust();
     </script>
 </body>
 </html>
