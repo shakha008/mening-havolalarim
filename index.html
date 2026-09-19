@@ -1,561 +1,736 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaxzod Rustamov | Viewfinder</title>
-    <!-- FontAwesome Ikonkalari -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Shriftlar: qo'lyozma ruhidagi serif + geometrik sans + kamera-HUD monospace -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaxzod Rustamov — Vizual Portfoli x Biyografiya</title>
 
-    <style>
-        /* ============ TOKENLAR ============ */
-        :root {
-            --void: #090C1A;
-            --deep: #10182F;
-            --turquoise: #1FA6A0;
-            --gold: #C9A24B;
-            --ivory: #EFE6D3;
-            --terracotta: #8C3B3B;
-        }
+<!-- Shriftlar va Ikonkalar -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+  :root {
+    --bg: #07090e;
+    --surface: rgba(18, 22, 31, 0.65);
+    --surface-hover: rgba(26, 32, 45, 0.85);
+    --line: rgba(201, 162, 75, 0.18);
+    --line-active: rgba(201, 162, 75, 0.5);
+    --text: #f3efe6;
+    --muted: #9ba0a8;
+    --gold: #c9a24b;
+    --gold-lt: #ebd29b;
+    --teal: #5ea8a0;
+    --shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+  }
 
-        body {
-            font-family: 'Manrope', sans-serif;
-            background-color: var(--void);
-            color: var(--ivory);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 24px;
-            overflow: hidden;
-            position: relative;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
-        /* ============ FON QATLAMLARI ============ */
+  body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    line-height: 1.5;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-        /* Xiralashgan profil surati - chuqurlik uchun */
-        .bg-blur-image {
-            position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 120%;
-            height: 120%;
-            background-image: url('photo_2026-07-09_10-46-02.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(60px) brightness(0.18) saturate(1.3) sepia(0.15);
-            z-index: -3;
-            transform: scale(1.05);
-            transition: transform 0.4s ease-out;
-        }
+  /* ===== FON QATLAMLARI (BACKGROUND EFFECTS) ===== */
 
-        /* Samarqand koshinlariga xos sakkiz qirrali yulduz naqshi (SVG pattern) */
-        #tile-pattern {
-            position: fixed;
-            inset: -20%;
-            width: 140%;
-            height: 140%;
-            z-index: -2;
-            opacity: 0.16;
-            animation: driftPattern 90s linear infinite;
-        }
+  .bg-photo {
+    position: fixed; inset: -10%;
+    background: url('photo_2026-07-09_10-46-02.jpg') center/cover no-repeat;
+    filter: blur(80px) saturate(0.8) brightness(0.25);
+    z-index: -4;
+    transform: scale(1.05);
+    transition: background-image 0.6s ease-in-out;
+    animation: bgFloat 16s ease-in-out infinite alternate;
+  }
 
-        @keyframes driftPattern {
-            0%   { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-4%, -3%) rotate(1.5deg); }
-        }
+  @keyframes bgFloat {
+    0% { transform: scale(1.05) translate(0, 0); }
+    50% { transform: scale(1.1) translate(-10px, -10px); }
+    100% { transform: scale(1.05) translate(10px, 5px); }
+  }
 
-        /* Zarra ("chang zarralari" / film grain) uchun canvas */
-        #dust-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+  .bg-glow {
+    position: fixed; inset: 0; z-index: -3;
+    background: 
+      radial-gradient(circle at 50% 10%, rgba(201, 162, 75, 0.22), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(94, 168, 160, 0.15), transparent 50%),
+      radial-gradient(circle at 20% 90%, rgba(201, 162, 75, 0.1), transparent 50%),
+      linear-gradient(180deg, rgba(7, 9, 14, 0.4) 0%, var(--bg) 90%);
+    animation: pulseGlow 8s ease-in-out infinite alternate;
+  }
 
-        /* ============ VIEWFINDER RAMKA (imzo elementi) ============ */
-        .viewfinder {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-        }
+  @keyframes pulseGlow {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
 
-        .bracket {
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            border: 2px solid var(--gold);
-            opacity: 0.85;
-            z-index: 3;
-        }
-        .bracket.tl { top: -10px; left: -10px; border-right: none; border-bottom: none; }
-        .bracket.tr { top: -10px; right: -10px; border-left: none; border-bottom: none; }
-        .bracket.bl { bottom: -10px; left: -10px; border-right: none; border-top: none; }
-        .bracket.br { bottom: -10px; right: -10px; border-left: none; border-top: none; }
+  .tiles {
+    position: fixed; inset: 0; z-index: -2;
+    opacity: 0.12; pointer-events: none;
+    mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 80%);
+    animation: rotateTiles 120s linear infinite;
+  }
 
-        /* Kamera HUD - qizil nuqta va yorliq */
-        .hud-strip {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-            color: var(--turquoise);
-            padding: 0 4px 14px;
-            opacity: 0.85;
-        }
-        .hud-rec {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--terracotta);
-        }
-        .hud-dot {
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--terracotta);
-            animation: blinkDot 1.6s ease-in-out infinite;
-        }
-        @keyframes blinkDot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
-        }
+  @keyframes rotateTiles {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 
-        /* Asosiy quti - iris ochilish animatsiyasi bilan */
-        .container {
-            width: 100%;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(16,24,47,0.82), rgba(9,12,26,0.9));
-            border: 1px solid rgba(201, 162, 75, 0.25);
-            padding: 34px 26px 30px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            position: relative;
-            clip-path: circle(0% at 50% 38%);
-            animation: irisOpen 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
-        }
+  .grain {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    opacity: 0.18; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
-        @keyframes irisOpen {
-            to { clip-path: circle(85% at 50% 38%); }
-        }
+  /* ===== MARKAZIY KARTA ===== */
+  .card-wrapper {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 410px;
+  }
 
-        /* Nozik ichki ramka chizig'i - koshin bezagi uslubida */
-        .container::before {
-            content: "";
-            position: absolute;
-            inset: 8px;
-            border: 1px solid rgba(31, 166, 160, 0.25);
-            pointer-events: none;
-        }
+  .card {
+    width: 100%;
+    position: relative;
+    padding: 36px 28px 28px;
+    background: rgba(14, 18, 26, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 162, 75, 0.2);
+    border-radius: 28px;
+    box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+    transform-style: preserve-3d;
+    animation: cardFloat 6s ease-in-out infinite alternate;
+  }
 
-        /* ============ PROFIL / FOKUS HALQASI ============ */
-        .profile-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 4px auto 22px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  @keyframes cardFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-8px); }
+  }
 
-        .profile-img {
-            width: 104px;
-            height: 104px;
-            border-radius: 50%;
-            object-fit: cover;
-            z-index: 2;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 0 4px rgba(9,12,26,0.9), 0 0 30px rgba(201,162,75,0.25);
-        }
+  .card:hover {
+    border-color: rgba(201, 162, 75, 0.35);
+    box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(201, 162, 75, 0.1);
+  }
 
-        /* Avtofokus "snap" halqasi - neon pulsatsiya o'rniga */
-        .focus-ring {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 1px solid var(--turquoise);
-            z-index: 1;
-            animation: focusSnap 5s ease-out infinite;
-        }
-        @keyframes focusSnap {
-            0%   { transform: scale(1.6); opacity: 0; filter: blur(4px); }
-            12%  { transform: scale(1);   opacity: 0.9; filter: blur(0); }
-            22%  { transform: scale(1.04); opacity: 0.6; }
-            30%  { transform: scale(1); opacity: 0.45; }
-            85%  { opacity: 0.45; }
-            100% { transform: scale(1.6); opacity: 0; filter: blur(4px); }
-        }
+  /* ===== PORTRET & GALEREYA TUGMASI ===== */
+  .portrait {
+    width: 140px;
+    height: 182px;
+    margin: 0 auto 24px;
+    position: relative;
+    transform: translateZ(20px);
+  }
 
-        /* Ism - qo'lyozma ruhidagi serif */
-        .name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.1rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            color: var(--ivory);
-        }
-        .name span {
-            color: var(--gold);
-        }
+  /* DOIMIY DOIRA VA NUR ANIMATSIYASI */
+  .portrait .frame {
+    position: absolute; inset: -10px;
+    border: 1px solid var(--gold);
+    border-radius: 80px 80px 12px 12px;
+    opacity: 0.65;
+    transition: all 0.4s ease;
+    animation: frameGlow 3s ease-in-out infinite alternate;
+  }
 
-        /* Typewriter matni */
-        .typewriter-container {
-            height: 20px;
-            margin-bottom: 30px;
-        }
-        .bio-dynamic {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            color: var(--turquoise);
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-right: 2px solid var(--gold);
-            white-space: nowrap;
-            animation: blink 0.75s step-end infinite;
-        }
-        @keyframes blink {
-            from, to { border-color: transparent }
-            50% { border-color: var(--gold); }
-        }
+  @keyframes frameGlow {
+    0% { box-shadow: 0 0 5px rgba(201, 162, 75, 0.2); border-color: var(--gold); }
+    100% { box-shadow: 0 0 20px rgba(201, 162, 75, 0.6); border-color: var(--gold-lt); }
+  }
 
-        /* ============ HAVOLALAR ============ */
-        .links {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
+  .portrait .frame::before {
+    content: ""; position: absolute; inset: 5px;
+    border: 1px solid var(--teal);
+    border-radius: 74px 74px 8px 8px;
+    opacity: 0.45;
+    animation: innerFramePulse 4s ease-in-out infinite alternate;
+  }
 
-        .link-btn {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(239, 230, 211, 0.03);
-            color: var(--ivory);
-            text-decoration: none;
-            padding: 14px 20px;
-            border: 1px solid rgba(239, 230, 211, 0.1);
-            border-left: 3px solid transparent;
-            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            overflow: hidden;
-        }
+  @keyframes innerFramePulse {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.7; }
+  }
 
-        .btn-title {
-            font-weight: 600;
-            font-size: 0.98rem;
-            letter-spacing: 0.4px;
-        }
+  .portrait .shot {
+    position: absolute; inset: 0;
+    border-radius: 76px 76px 10px 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    clip-path: inset(100% 0 0 0);
+    animation: archOpen 1.2s cubic-bezier(.16,1,.3,1) .2s forwards;
+    cursor: pointer;
+  }
 
-        .btn-stats {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            color: rgba(239, 230, 211, 0.4);
-            margin-top: 4px;
-            font-weight: 400;
-            letter-spacing: 1px;
-            transition: color 0.3s;
-        }
+  .portrait img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.6s cubic-bezier(.16,1,.3,1), opacity 0.4s ease;
+  }
 
-        .link-btn i {
-            position: absolute;
-            left: 22px;
-            font-size: 1.25rem;
-            transition: transform 0.3s ease;
-            opacity: 0.9;
-        }
+  .portrait:hover img {
+    transform: scale(1.08);
+  }
 
-        .link-btn:hover {
-            transform: translateX(2px);
-            background: rgba(239, 230, 211, 0.06);
-        }
+  .portrait-hint {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 14, 20, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-lt);
+    font-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 76px 76px 10px 10px;
+    z-index: 2;
+  }
 
-        .link-btn:hover i {
-            transform: scale(1.15);
-        }
+  .portrait:hover .portrait-hint {
+    opacity: 1;
+  }
 
-        .telegram:hover { border-left-color: #3AB0DE; color: #3AB0DE; }
-        .telegram:hover .btn-stats { color: rgba(58, 176, 222, 0.75); }
+  /* ===== 3 TA RASMDAN BIRINI SELEKT QILISH PANELI ===== */
+  .photo-selector {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: -10px auto 20px;
+    transform: translateZ(20px);
+  }
 
-        .youtube:hover { border-left-color: #D9534F; color: #D9534F; }
-        .youtube:hover .btn-stats { color: rgba(217, 83, 79, 0.75); }
+  .selector-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+    transition: all 0.3s cubic-bezier(.16,1,.3,1);
+    position: relative;
+    padding: 0;
+  }
 
-        .portfolio:hover { border-left-color: var(--turquoise); color: var(--turquoise); }
-        .portfolio:hover .btn-stats { color: rgba(31, 166, 160, 0.75); }
+  .selector-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-        .instagram:hover { border-left-color: var(--gold); color: var(--gold); }
-        .instagram:hover .btn-stats { color: rgba(201, 162, 75, 0.75); }
+  .selector-btn:hover {
+    transform: translateY(-3px) scale(1.1);
+    border-color: var(--gold-lt);
+    box-shadow: 0 5px 15px rgba(201, 162, 75, 0.4);
+  }
 
-        /* Ulashish tugmasi */
-        .share-btn {
-            margin-top: 26px;
-            background: none;
-            border: none;
-            color: rgba(239, 230, 211, 0.35);
-            cursor: pointer;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            width: 100%;
-            transition: color 0.3s;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .share-btn:hover {
-            color: var(--turquoise);
-        }
+  .selector-btn.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 12px var(--gold);
+    transform: scale(1.15);
+  }
 
-        /* Toast bildirishnomasi */
-        #toast {
-            visibility: hidden;
-            min-width: 220px;
-            background: rgba(16, 24, 47, 0.97);
-            color: var(--turquoise);
-            border: 1px solid var(--turquoise);
-            box-shadow: 0 0 24px rgba(31, 166, 160, 0.3);
-            text-align: center;
-            border-radius: 4px;
-            padding: 14px;
-            position: fixed;
-            z-index: 10;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-        }
-        #toast.show { visibility: visible; bottom: 40px; opacity: 1; }
+  .selector-btn.active::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    inset: 0;
+    background: rgba(201, 162, 75, 0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+  @keyframes archOpen { to { clip-path: inset(0 0 0 0); } }
+
+  /* ===== ISM VA UNVON ===== */
+  .profile { text-align: center; margin-bottom: 8px; transform: translateZ(15px); }
+
+  .name {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2.3rem, 10vw, 2.8rem);
+    line-height: 1.05;
+    background: linear-gradient(175deg, #ffffff 0%, var(--gold-lt) 40%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .name .sur { display: block; }
+
+  .role {
+    margin-top: 10px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .role em {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--teal);
+  }
+
+  .rule {
+    width: 100%; height: 12px; margin: 20px 0 22px;
+    color: var(--gold); opacity: 0.6;
+    transform: translateZ(10px);
+  }
+
+  /* ===== HAVOLALAR ===== */
+  .links { display: flex; flex-direction: column; gap: 12px; transform: translateZ(15px); }
+
+  .link {
+    position: relative;
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 18px;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 12px 18px 18px 12px;
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(.16,1,.3,1);
+  }
+
+  /* YALTIRASH ANIMATSIYASI */
+  .link::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(201, 162, 75, 0.25), transparent);
+    transform: translateX(-100%);
+    animation: shineLight 4s infinite ease-in-out;
+  }
+
+  @keyframes shineLight {
+    0% { transform: translateX(-100%); }
+    20%, 100% { transform: translateX(100%); }
+  }
+
+  .links .link:nth-child(1)::before { animation-delay: 0s; }
+  .links .link:nth-child(2)::before { animation-delay: 1s; }
+  .links .link:nth-child(3)::before { animation-delay: 2s; }
+  .links .link:nth-child(4)::before { animation-delay: 3s; }
+
+  .link:hover {
+    transform: translateX(6px);
+    border-color: var(--line-active);
+    background: var(--surface-hover);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .badge {
+    width: 42px; height: 44px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+    border-radius: 20px 20px 6px 6px;
+    color: var(--gold-lt);
+    font-size: 1.15rem;
+    transition: all 0.3s ease;
+  }
+
+  .link:hover .badge {
+    color: #ffffff;
+    background: rgba(201, 162, 75, 0.2);
+    border-color: var(--gold);
+  }
+
+  .link-text { display: flex; flex-direction: column; }
+  .link-title { font-size: 0.95rem; font-weight: 600; }
+  .link-note { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* ===== ULASHISH TUGMASI ===== */
+  .share {
+    margin-top: 24px; width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    padding: 12px;
+    background: rgba(201, 162, 75, 0.05);
+    border: 1px solid rgba(201, 162, 75, 0.15);
+    border-radius: 12px;
+    color: var(--gold-lt);
+    font-family: inherit; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: sharePulse 3s infinite alternate;
+  }
+
+  @keyframes sharePulse {
+    0% { border-color: rgba(201, 162, 75, 0.15); box-shadow: none; }
+    100% { border-color: rgba(201, 162, 75, 0.4); box-shadow: 0 0 15px rgba(201, 162, 75, 0.15); }
+  }
+
+  .share:hover {
+    background: rgba(201, 162, 75, 0.15);
+    border-color: var(--gold);
+    color: #fff;
+  }
+
+  /* ===== MODAL GALEREYA (LIGHTBOX) ===== */
+  .gallery-modal {
+    position: fixed; inset: 0;
+    background: rgba(7, 9, 14, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .gallery-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gallery-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gallery-content img {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 16px;
+    border: 1px solid rgba(201, 162, 75, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+
+  /* Galereya Navigatsiyasi */
+  .gallery-close {
+    position: absolute;
+    top: 25px; right: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--line);
+    color: var(--text);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-close:hover {
+    background: rgba(201, 162, 75, 0.3);
+    color: #fff;
+    transform: rotate(90deg);
+  }
+
+  .gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(18, 22, 31, 0.7);
+    border: 1px solid var(--line);
+    color: var(--gold-lt);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-nav:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  .gallery-prev { left: -20px; }
+  .gallery-next { right: -20px; }
+
+  .gallery-counter {
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed; left: 50%; bottom: 32px;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(14, 18, 26, 0.95);
+    border: 1px solid var(--gold);
+    color: var(--gold-lt);
+    padding: 12px 24px; border-radius: 30px; font-size: 0.88rem;
+    opacity: 0; pointer-events: none;
+    transition: all 0.3s ease; z-index: 100;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .reveal { opacity: 0; transform: translateY(16px); animation: rise 0.8s cubic-bezier(.16,1,.3,1) forwards; }
+  .profile { animation-delay: 0.35s; }
+  .rule { animation-delay: 0.45s; }
+  .links .link:nth-child(1) { animation-delay: 0.55s; }
+  .links .link:nth-child(2) { animation-delay: 0.63s; }
+  .links .link:nth-child(3) { animation-delay: 0.71s; }
+  .links .link:nth-child(4) { animation-delay: 0.79s; }
+  .share { animation-delay: 0.9s; }
+
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+</style>
 </head>
 <body>
 
-    <!-- Xiralashgan orqa fon rasmi -->
-    <div class="bg-blur-image" id="bg-img"></div>
+<div class="bg-photo" id="bgPhoto"></div>
+<div class="bg-glow"></div>
 
-    <!-- Samarqand koshin naqshi -->
-    <svg id="tile-pattern" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <pattern id="star8" width="72" height="72" patternUnits="userSpaceOnUse">
-                <g stroke="#C9A24B" stroke-width="1" fill="none">
-                    <path d="M36 4 L46 26 L68 36 L46 46 L36 68 L26 46 L4 36 L26 26 Z" />
-                    <circle cx="36" cy="36" r="10" stroke="#1FA6A0" />
-                </g>
-            </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#star8)" />
-    </svg>
+<svg class="tiles" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <pattern id="star8" width="80" height="80" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="#c9a24b" stroke-width="1">
+        <path d="M40 5 L51 30 L75 40 L51 50 L40 75 L29 50 L5 40 L29 30 Z"/>
+        <circle cx="40" cy="40" r="12" stroke="#5ea8a0"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#star8)"/>
+</svg>
 
-    <!-- Chang zarralari (film grain) uchun canvas -->
-    <canvas id="dust-canvas"></canvas>
+<div class="grain"></div>
 
-    <div class="viewfinder">
-        <div class="bracket tl"></div>
-        <div class="bracket tr"></div>
-        <div class="bracket bl"></div>
-        <div class="bracket br"></div>
+<div class="card-wrapper">
+  <main class="card" id="tiltCard">
 
-        <div class="hud-strip">
-            <span class="hud-rec"><span class="hud-dot"></span>REC</span>
-            <span>SAMARQAND</span>
+    <!-- Surat / Arch (Galereyani ochish tugmasi) -->
+    <div class="portrait">
+      <div class="frame"></div>
+      <div class="shot" onclick="openGallery(currentIndex)">
+        <img id="mainProfileImg" src="photo_2026-07-09_10-46-02.jpg" alt="Shaxzod Rustamov">
+        <div class="portrait-hint">
+          <i class="fa-solid fa-expand"></i>
         </div>
-
-        <div class="container">
-            <!-- Profil qismi -->
-            <div class="profile-wrapper">
-                <div class="focus-ring"></div>
-                <img src="photo_2026-07-09_10-46-02.jpg" alt="Profil Rasmi" class="profile-img">
-            </div>
-
-            <h1 class="name">Shaxzod <span>Rustamov</span></h1>
-
-            <!-- Dinamik yoziladigan matn -->
-            <div class="typewriter-container">
-                <span class="bio-dynamic" id="dynamic-text"></span>
-            </div>
-
-            <!-- Havolalar qismi -->
-            <div class="links">
-                <a href="https://t.me/Mobilografsamarqand" class="link-btn telegram" target="_blank">
-                    <i class="fab fa-telegram"></i>
-                    <span class="btn-title">Telegram Kanalim</span>
-                    <span class="btn-stats">TELEGRAM PORTFOLIO</span>
-                </a>
-
-                <a href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" class="link-btn youtube" target="_blank">
-                    <i class="fab fa-youtube"></i>
-                    <span class="btn-title">YouTube Channel</span>
-                    <span class="btn-stats">QIZIQISH UCHUN</span>
-                </a>
-
-                <a href="https://t.me/RUSTAMOV016" class="link-btn portfolio" target="_blank">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span class="btn-title">Bog'lanish (Telegram)</span>
-                    <span class="btn-stats">Xizmatlar va Hamkorlik uchun</span>
-                </a>
-
-                <a href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" class="link-btn instagram" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                    <span class="btn-title">INSTAGRAM</span>
-                    <span class="btn-stats">FOTO VA VIDEO</span>
-                </a>
-            </div>
-
-            <!-- Ulashish tugmasi -->
-            <button class="share-btn" onclick="copyLink()">
-                <i class="fas fa-share-alt"></i> Sahifa nusxasini olish
-            </button>
-        </div>
+      </div>
     </div>
 
-    <div id="toast"><i class="fas fa-check-circle"></i> TIZIM: Havola nusxalandi!</div>
+    <!-- 3 Ta Rasmdan Birini Tanlash Paneli -->
+    <div class="photo-selector reveal">
+      <button class="selector-btn active" onclick="setProfileImage(0)" title="1-rasmni o'rnatish">
+        <img src="photo_2026-07-09_10-46-02.jpg" alt="Rasm 1">
+      </button>
+      <button class="selector-btn" onclick="setProfileImage(1)" title="2-rasmni o'rnatish">
+        <img src="image.png" alt="Rasm 2">
+      </button>
+      <button class="selector-btn" onclick="setProfileImage(2)" title="3-rasmni o'rnatish">
+        <img src="photo_2026-09-19_14-25-30.jpg" alt="Rasm 3">
+      </button>
+    </div>
 
-    <script>
-        // 1. SAHIFA LINKINI NUSXALASH
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                const toast = document.getElementById("toast");
-                toast.classList.add("show");
-                setTimeout(() => { toast.classList.remove("show"); }, 2500);
-            });
-        }
+    <!-- Shaxsiy Ma'lumot -->
+    <div class="profile reveal">
+      <h1 class="name">Shaxzod <span class="sur">Rustamov</span></h1>
+      <p class="role">Samarqandda <em>mobilografiya</em> va dizayn</p>
+    </div>
 
-        // 2. DINAMIK TYPEWRITER (YOZILISH) ANIMATSIYASI
-        const words = ["MOBILOGRAF", "GRAPHIC DESIGNER", "DEVELOPER", "BLOGER"];
-        let i = 0;
-        let timer;
+    <svg class="rule reveal" viewBox="0 0 320 12" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="0" y1="6" x2="135" y2="6" stroke="currentColor" stroke-width="1"/>
+      <path d="M160 0 L166 6 L160 12 L154 6 Z" fill="currentColor"/>
+      <line x1="185" y1="6" x2="320" y2="6" stroke="currentColor" stroke-width="1"/>
+    </svg>
 
-        function typingEffect() {
-            let word = words[i].split("");
-            var loopTyping = function() {
-                if (word.length > 0) {
-                    document.getElementById('dynamic-text').innerHTML += word.shift();
-                } else {
-                    setTimeout(deletingEffect, 2000);
-                    return false;
-                }
-                timer = setTimeout(loopTyping, 100);
-            };
-            loopTyping();
-        }
+    <!-- Havolalar Ro'yxati -->
+    <nav class="links">
+      <a class="link reveal" href="https://t.me/Mobilografsamarqand" target="_blank" rel="noopener">
+        <span class="badge"><i class="fa-brands fa-telegram"></i></span>
+        <span class="link-text">
+          <span class="link-title">Telegram kanalim</span>
+          <span class="link-note">Portfolio va sara ishlarim</span>
+        </span>
+      </a>
 
-        function deletingEffect() {
-            let word = words[i].split("");
-            var loopDeleting = function() {
-                if (word.length > 0) {
-                    word.pop();
-                    document.getElementById('dynamic-text').innerHTML = word.join("");
-                } else {
-                    if (words.length > (i + 1)) { i++; } else { i = 0; }
-                    setTimeout(typingEffect, 500);
-                    return false;
-                }
-                timer = setTimeout(loopDeleting, 50);
-            };
-            loopDeleting();
-        }
-        typingEffect();
+      <a class="link reveal" href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" target="_blank" rel="noopener">
+        <span class="badge"><i class="fa-brands fa-youtube"></i></span>
+        <span class="link-text">
+          <span class="link-title">YouTube Kanalim</span>
+          <span class="link-note">Eksklyuziv video darsliklar</span>
+        </span>
+      </a>
 
-        // 3. PARALLAX EFFEKTI (FON RASMI UCHUN)
-        const bgImg = document.getElementById('bg-img');
-        const tilePattern = document.getElementById('tile-pattern');
-        let mouseX = 0, mouseY = 0;
+      <a class="link reveal" href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" target="_blank" rel="noopener">
+        <span class="badge"><i class="fa-brands fa-instagram"></i></span>
+        <span class="link-text">
+          <span class="link-title">Instagram</span>
+          <span class="link-note">Kundalik kreativ contentlar</span>
+        </span>
+      </a>
 
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) / 45;
-            mouseY = (e.clientY - window.innerHeight / 2) / 45;
-            bgImg.style.transform = `translate(${-mouseX}px, ${-mouseY}px) scale(1.05)`;
-            tilePattern.style.transform = `translate(${-mouseX * 1.6}px, ${-mouseY * 1.6}px)`;
-        });
+      <a class="link reveal" href="https://t.me/RUSTAMOV016" target="_blank" rel="noopener">
+        <span class="badge"><i class="fa-solid fa-paper-plane"></i></span>
+        <span class="link-text">
+          <span class="link-title">Menga yozing</span>
+          <span class="link-note">Xizmat va hamkorlik uchun</span>
+        </span>
+      </a>
+    </nav>
 
-        // 4. CHANG ZARRALARI (FILM GRAIN / LIGHT-LEAK TRAIL)
-        const dustCanvas = document.getElementById('dust-canvas');
-        const ctx = dustCanvas.getContext('2d');
-        let motes = [];
+    <!-- Ulashish Tugmasi -->
+    <button class="share reveal" onclick="handleShare()">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i> Profilni ulashish
+    </button>
 
-        function resizeDustCanvas() {
-            dustCanvas.width = window.innerWidth;
-            dustCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeDustCanvas);
-        resizeDustCanvas();
+  </main>
+</div>
 
-        class Mote {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 2.5 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.6;
-                this.speedY = (Math.random() - 0.5) * 0.6 - 0.15;
-                this.life = 1;
-                this.gold = Math.random() > 0.5;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life -= 0.012;
-            }
-            draw() {
-                ctx.globalAlpha = Math.max(this.life, 0) * 0.7;
-                ctx.fillStyle = this.gold ? '#C9A24B' : '#1FA6A0';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-        }
+<!-- GALEREYA MODAL OYNASI -->
+<div class="gallery-modal" id="galleryModal">
+  <button class="gallery-close" onclick="closeGallery()"><i class="fa-solid fa-xmark"></i></button>
+  
+  <div class="gallery-content">
+    <button class="gallery-nav gallery-prev" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+    <img id="galleryImage" src="" alt="Portfolio rasmi">
+    <button class="gallery-nav gallery-next" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
 
-        window.addEventListener('mousemove', (e) => {
-            for (let i = 0; i < 2; i++) {
-                motes.push(new Mote(e.clientX, e.clientY));
-            }
-            if (motes.length > 200) motes.splice(0, motes.length - 200);
-        });
+  <div class="gallery-counter" id="galleryCounter">1 / 3</div>
+</div>
 
-        window.addEventListener('touchmove', (e) => {
-            motes.push(new Mote(e.touches[0].clientX, e.touches[0].clientY));
-        });
+<div id="toast">Havola nusxalandi!</div>
 
-        function animateDust() {
-            ctx.clearRect(0, 0, dustCanvas.width, dustCanvas.height);
-            for (let i = 0; i < motes.length; i++) {
-                motes[i].update();
-                motes[i].draw();
-                if (motes[i].life <= 0) {
-                    motes.splice(i, 1);
-                    i--;
-                }
-            }
-            requestAnimationFrame(animateDust);
-        }
-        animateDust();
-    </script>
+<script>
+  // RASMLAR RO'YXATI
+  const images = [
+    'photo_2026-07-09_10-46-02.jpg',
+    'image.png',
+    'photo_2026-09-19_14-25-30.jpg'
+  ];
+
+  let currentIndex = 0;
+
+  // PROFILE RASMINI ALMASHTIRISH FUNKSIYASI
+  function setProfileImage(index) {
+    currentIndex = index;
+    const selectedImg = images[index];
+
+    // Asosiy profil rasmi va arka fonni o'zgartirish
+    const mainImg = document.getElementById('mainProfileImg');
+    const bgPhoto = document.getElementById('bgPhoto');
+
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+      mainImg.src = selectedImg;
+      bgPhoto.style.backgroundImage = `url('${selectedImg}')`;
+      mainImg.style.opacity = '1';
+    }, 200);
+
+    // Tugmalar aktivligini belgilash
+    const buttons = document.querySelectorAll('.selector-btn');
+    buttons.forEach((btn, idx) => {
+      if (idx === index) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    showToast(`${index + 1}-rasm tanlandi!`);
+  }
+
+  function openGallery(index) {
+    currentIndex = index;
+    updateGallery();
+    document.getElementById('galleryModal').classList.add('active');
+  }
+
+  function closeGallery() {
+    document.getElementById('galleryModal').classList.remove('active');
+  }
+
+  function changeImage(direction) {
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = images.length - 1;
+    if (currentIndex >= images.length) currentIndex = 0;
+    updateGallery();
+  }
+
+  function updateGallery() {
+    const imgElement = document.getElementById('galleryImage');
+    const counterElement = document.getElementById('galleryCounter');
+    
+    imgElement.src = images[currentIndex];
+    counterElement.textContent = `${currentIndex + 1} / ${images.length}`;
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  // Klaviatura orqali boshqarish
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('galleryModal');
+    if (modal.classList.contains('active')) {
+      if (e.key === 'Escape') closeGallery();
+      if (e.key === 'ArrowLeft') changeImage(-1);
+      if (e.key === 'ArrowRight') changeImage(1);
+    }
+  });
+
+  // Ulashish va Copy mantiq
+  async function handleShare() {
+    const shareData = {
+      title: 'Shaxzod Rustamov',
+      text: 'Shaxzod Rustamov — Samarqandda mobilografiya va dizayn xizmati.',
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch (err) {}
+    } else {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Havola nusxalandi!');
+      });
+    }
+  }
+
+  // Tilt Card Effect
+  const card = document.getElementById('tiltCard');
+  const wrapper = document.querySelector('.card-wrapper');
+
+  if (window.matchMedia("(pointer: fine)").matches) {
+    wrapper.addEventListener('mousemove', (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      card.style.transform = `rotateX(${(-y / rect.height) * 10}deg) rotateY(${(x / rect.width) * 10}deg)`;
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+  }
+</script>
+
 </body>
 </html>
