@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shaxzod Rustamov — Vizual Portfoli x Biyografiya</title>
+<title>Shaxzod Rustamov — Personal Brand Portfolio</title>
 
 <!-- Shriftlar va Ikonkalar -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,17 +13,17 @@
 
 <style>
   :root {
-    --bg: #07090e;
-    --surface: rgba(18, 22, 31, 0.65);
-    --surface-hover: rgba(26, 32, 45, 0.85);
-    --line: rgba(201, 162, 75, 0.18);
-    --line-active: rgba(201, 162, 75, 0.5);
-    --text: #f3efe6;
-    --muted: #9ba0a8;
-    --gold: #c9a24b;
-    --gold-lt: #ebd29b;
-    --teal: #5ea8a0;
-    --shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+    --bg: #030712;
+    --surface: rgba(15, 23, 42, 0.65);
+    --surface-hover: rgba(30, 41, 59, 0.85);
+    --line: rgba(56, 189, 248, 0.18);
+    --line-active: rgba(56, 189, 248, 0.55);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --blue: #3b82f6;
+    --blue-lt: #60a5fa;
+    --cyan: #06b6d4;
+    --shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,43 +45,27 @@
 
   /* ===== FON QATLAMLARI (BACKGROUND EFFECTS) ===== */
 
-  .bg-photo {
-    position: fixed; inset: -10%;
-    background: url('photo_2026-07-09_10-46-02.jpg') center/cover no-repeat;
-    filter: blur(80px) saturate(0.8) brightness(0.25);
-    z-index: -4;
-    transform: scale(1.05);
-    transition: background-image 0.6s ease-in-out;
-    animation: bgFloat 16s ease-in-out infinite alternate;
-  }
-
-  @keyframes bgFloat {
-    0% { transform: scale(1.05) translate(0, 0); }
-    50% { transform: scale(1.1) translate(-10px, -10px); }
-    100% { transform: scale(1.05) translate(10px, 5px); }
-  }
-
   .bg-glow {
     position: fixed; inset: 0; z-index: -3;
     background: 
-      radial-gradient(circle at 50% 10%, rgba(201, 162, 75, 0.22), transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(94, 168, 160, 0.15), transparent 50%),
-      radial-gradient(circle at 20% 90%, rgba(201, 162, 75, 0.1), transparent 50%),
-      linear-gradient(180deg, rgba(7, 9, 14, 0.4) 0%, var(--bg) 90%);
+      radial-gradient(circle at 50% 15%, rgba(59, 130, 246, 0.2), transparent 50%),
+      radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.12), transparent 50%),
+      radial-gradient(circle at 15% 80%, rgba(59, 130, 246, 0.08), transparent 50%),
+      linear-gradient(180deg, rgba(3, 7, 18, 0.4) 0%, var(--bg) 90%);
     animation: pulseGlow 8s ease-in-out infinite alternate;
   }
 
   @keyframes pulseGlow {
-    0% { opacity: 0.6; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1.05); }
+    0% { opacity: 0.7; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.04); }
   }
 
   .tiles {
     position: fixed; inset: 0; z-index: -2;
-    opacity: 0.12; pointer-events: none;
-    mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 80%);
-    animation: rotateTiles 120s linear infinite;
+    opacity: 0.1; pointer-events: none;
+    mask-image: radial-gradient(circle at 50% 40%, #000 25%, transparent 85%);
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 25%, transparent 85%);
+    animation: rotateTiles 140s linear infinite;
   }
 
   @keyframes rotateTiles {
@@ -91,7 +75,7 @@
 
   .grain {
     position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    opacity: 0.18; mix-blend-mode: overlay;
+    opacity: 0.15; mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -105,11 +89,11 @@
   .card {
     width: 100%;
     position: relative;
-    padding: 36px 28px 28px;
-    background: rgba(14, 18, 26, 0.55);
+    padding: 38px 28px 30px;
+    background: rgba(15, 23, 42, 0.55);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(201, 162, 75, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.2);
     border-radius: 28px;
     box-shadow: var(--shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -123,151 +107,48 @@
   }
 
   .card:hover {
-    border-color: rgba(201, 162, 75, 0.35);
-    box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(201, 162, 75, 0.1);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 35px 70px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(59, 130, 246, 0.12);
   }
 
-  /* ===== PORTRET & GALEREYA TUGMASI ===== */
-  .portrait {
-    width: 140px;
-    height: 182px;
-    margin: 0 auto 24px;
-    position: relative;
+  /* ===== BRAND BADGE / ICON HEADER ===== */
+  .brand-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
     transform: translateZ(20px);
   }
 
-  /* DOIMIY DOIRA VA NUR ANIMATSIYASI */
-  .portrait .frame {
-    position: absolute; inset: -10px;
-    border: 1px solid var(--gold);
-    border-radius: 80px 80px 12px 12px;
-    opacity: 0.65;
-    transition: all 0.4s ease;
-    animation: frameGlow 3s ease-in-out infinite alternate;
-  }
-
-  @keyframes frameGlow {
-    0% { box-shadow: 0 0 5px rgba(201, 162, 75, 0.2); border-color: var(--gold); }
-    100% { box-shadow: 0 0 20px rgba(201, 162, 75, 0.6); border-color: var(--gold-lt); }
-  }
-
-  .portrait .frame::before {
-    content: ""; position: absolute; inset: 5px;
-    border: 1px solid var(--teal);
-    border-radius: 74px 74px 8px 8px;
-    opacity: 0.45;
-    animation: innerFramePulse 4s ease-in-out infinite alternate;
-  }
-
-  @keyframes innerFramePulse {
-    0% { opacity: 0.3; }
-    100% { opacity: 0.7; }
-  }
-
-  .portrait .shot {
-    position: absolute; inset: 0;
-    border-radius: 76px 76px 10px 10px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-    clip-path: inset(100% 0 0 0);
-    animation: archOpen 1.2s cubic-bezier(.16,1,.3,1) .2s forwards;
-    cursor: pointer;
-  }
-
-  .portrait img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    transition: transform 0.6s cubic-bezier(.16,1,.3,1), opacity 0.4s ease;
-  }
-
-  .portrait:hover img {
-    transform: scale(1.08);
-  }
-
-  .portrait-hint {
-    position: absolute;
-    inset: 0;
-    background: rgba(11, 14, 20, 0.4);
+  .brand-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.15));
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold-lt);
-    font-size: 1.4rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 76px 76px 10px 10px;
-    z-index: 2;
+    color: var(--blue-lt);
+    font-size: 1.5rem;
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+    animation: iconGlow 3s ease-in-out infinite alternate;
   }
 
-  .portrait:hover .portrait-hint {
-    opacity: 1;
+  @keyframes iconGlow {
+    0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); border-color: rgba(56, 189, 248, 0.3); }
+    100% { box-shadow: 0 0 22px rgba(56, 189, 248, 0.5); border-color: var(--blue-lt); }
   }
-
-  /* ===== 3 TA RASMDAN BIRINI SELEKT QILISH PANELI ===== */
-  .photo-selector {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: -10px auto 20px;
-    transform: translateZ(20px);
-  }
-
-  .selector-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 2px solid var(--line);
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--surface);
-    transition: all 0.3s cubic-bezier(.16,1,.3,1);
-    position: relative;
-    padding: 0;
-  }
-
-  .selector-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .selector-btn:hover {
-    transform: translateY(-3px) scale(1.1);
-    border-color: var(--gold-lt);
-    box-shadow: 0 5px 15px rgba(201, 162, 75, 0.4);
-  }
-
-  .selector-btn.active {
-    border-color: var(--gold);
-    box-shadow: 0 0 12px var(--gold);
-    transform: scale(1.15);
-  }
-
-  .selector-btn.active::after {
-    content: "\f00c";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    position: absolute;
-    inset: 0;
-    background: rgba(201, 162, 75, 0.5);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-  }
-
-  @keyframes archOpen { to { clip-path: inset(0 0 0 0); } }
 
   /* ===== ISM VA UNVON ===== */
-  .profile { text-align: center; margin-bottom: 8px; transform: translateZ(15px); }
+  .profile { text-align: center; margin-bottom: 12px; transform: translateZ(15px); }
 
   .name {
     font-family: 'Instrument Serif', Georgia, serif;
     font-weight: 400;
-    font-size: clamp(2.3rem, 10vw, 2.8rem);
+    font-size: clamp(2.4rem, 10vw, 2.9rem);
     line-height: 1.05;
-    background: linear-gradient(175deg, #ffffff 0%, var(--gold-lt) 40%, var(--gold) 100%);
+    background: linear-gradient(175deg, #ffffff 0%, var(--blue-lt) 50%, var(--blue) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -277,20 +158,20 @@
 
   .role {
     margin-top: 10px;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     color: var(--muted);
   }
 
   .role em {
     font-family: 'Instrument Serif', Georgia, serif;
     font-style: italic;
-    font-size: 1.15rem;
-    color: var(--teal);
+    font-size: 1.2rem;
+    color: var(--cyan);
   }
 
   .rule {
-    width: 100%; height: 12px; margin: 20px 0 22px;
-    color: var(--gold); opacity: 0.6;
+    width: 100%; height: 12px; margin: 18px 0 24px;
+    color: var(--blue); opacity: 0.5;
     transform: translateZ(10px);
   }
 
@@ -315,7 +196,7 @@
   /* YALTIRASH ANIMATSIYASI */
   .link::before {
     content: ""; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(201, 162, 75, 0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.25), transparent);
     transform: translateX(-100%);
     animation: shineLight 4s infinite ease-in-out;
   }
@@ -343,15 +224,15 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--line);
     border-radius: 20px 20px 6px 6px;
-    color: var(--gold-lt);
+    color: var(--blue-lt);
     font-size: 1.15rem;
     transition: all 0.3s ease;
   }
 
   .link:hover .badge {
     color: #ffffff;
-    background: rgba(201, 162, 75, 0.2);
-    border-color: var(--gold);
+    background: rgba(59, 130, 246, 0.25);
+    border-color: var(--blue);
   }
 
   .link-text { display: flex; flex-direction: column; }
@@ -363,10 +244,10 @@
     margin-top: 24px; width: 100%;
     display: flex; align-items: center; justify-content: center; gap: 9px;
     padding: 12px;
-    background: rgba(201, 162, 75, 0.05);
-    border: 1px solid rgba(201, 162, 75, 0.15);
+    background: rgba(59, 130, 246, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.2);
     border-radius: 12px;
-    color: var(--gold-lt);
+    color: var(--blue-lt);
     font-family: inherit; font-size: 0.85rem; font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -374,114 +255,23 @@
   }
 
   @keyframes sharePulse {
-    0% { border-color: rgba(201, 162, 75, 0.15); box-shadow: none; }
-    100% { border-color: rgba(201, 162, 75, 0.4); box-shadow: 0 0 15px rgba(201, 162, 75, 0.15); }
+    0% { border-color: rgba(56, 189, 248, 0.2); box-shadow: none; }
+    100% { border-color: rgba(56, 189, 248, 0.5); box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
   }
 
   .share:hover {
-    background: rgba(201, 162, 75, 0.15);
-    border-color: var(--gold);
+    background: rgba(59, 130, 246, 0.18);
+    border-color: var(--blue);
     color: #fff;
-  }
-
-  /* ===== MODAL GALEREYA (LIGHTBOX) ===== */
-  .gallery-modal {
-    position: fixed; inset: 0;
-    background: rgba(7, 9, 14, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .gallery-modal.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .gallery-content {
-    position: relative;
-    max-width: 90vw;
-    max-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .gallery-content img {
-    max-width: 100%;
-    max-height: 75vh;
-    border-radius: 16px;
-    border: 1px solid rgba(201, 162, 75, 0.3);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-    object-fit: contain;
-    transition: transform 0.3s ease;
-  }
-
-  /* Galereya Navigatsiyasi */
-  .gallery-close {
-    position: absolute;
-    top: 25px; right: 25px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--line);
-    color: var(--text);
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .gallery-close:hover {
-    background: rgba(201, 162, 75, 0.3);
-    color: #fff;
-    transform: rotate(90deg);
-  }
-
-  .gallery-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(18, 22, 31, 0.7);
-    border: 1px solid var(--line);
-    color: var(--gold-lt);
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .gallery-nav:hover {
-    background: var(--gold);
-    color: #000;
-  }
-
-  .gallery-prev { left: -20px; }
-  .gallery-next { right: -20px; }
-
-  .gallery-counter {
-    margin-top: 18px;
-    font-size: 0.9rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
   }
 
   /* TOAST */
   #toast {
     position: fixed; left: 50%; bottom: 32px;
     transform: translateX(-50%) translateY(20px);
-    background: rgba(14, 18, 26, 0.95);
-    border: 1px solid var(--gold);
-    color: var(--gold-lt);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid var(--blue);
+    color: var(--blue-lt);
     padding: 12px 24px; border-radius: 30px; font-size: 0.88rem;
     opacity: 0; pointer-events: none;
     transition: all 0.3s ease; z-index: 100;
@@ -489,28 +279,27 @@
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   .reveal { opacity: 0; transform: translateY(16px); animation: rise 0.8s cubic-bezier(.16,1,.3,1) forwards; }
-  .profile { animation-delay: 0.35s; }
-  .rule { animation-delay: 0.45s; }
-  .links .link:nth-child(1) { animation-delay: 0.55s; }
-  .links .link:nth-child(2) { animation-delay: 0.63s; }
-  .links .link:nth-child(3) { animation-delay: 0.71s; }
-  .links .link:nth-child(4) { animation-delay: 0.79s; }
-  .share { animation-delay: 0.9s; }
+  .profile { animation-delay: 0.3s; }
+  .rule { animation-delay: 0.4s; }
+  .links .link:nth-child(1) { animation-delay: 0.5s; }
+  .links .link:nth-child(2) { animation-delay: 0.58s; }
+  .links .link:nth-child(3) { animation-delay: 0.66s; }
+  .links .link:nth-child(4) { animation-delay: 0.74s; }
+  .share { animation-delay: 0.85s; }
 
   @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<div class="bg-photo" id="bgPhoto"></div>
 <div class="bg-glow"></div>
 
 <svg class="tiles" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     <pattern id="star8" width="80" height="80" patternUnits="userSpaceOnUse">
-      <g fill="none" stroke="#c9a24b" stroke-width="1">
+      <g fill="none" stroke="#3b82f6" stroke-width="1">
         <path d="M40 5 L51 30 L75 40 L51 50 L40 75 L29 50 L5 40 L29 30 Z"/>
-        <circle cx="40" cy="40" r="12" stroke="#5ea8a0"/>
+        <circle cx="40" cy="40" r="12" stroke="#06b6d4"/>
       </g>
     </pattern>
   </defs>
@@ -522,28 +311,11 @@
 <div class="card-wrapper">
   <main class="card" id="tiltCard">
 
-    <!-- Surat / Arch (Galereyani ochish tugmasi) -->
-    <div class="portrait">
-      <div class="frame"></div>
-      <div class="shot" onclick="openGallery(currentIndex)">
-        <img id="mainProfileImg" src="photo_2026-07-09_10-46-02.jpg" alt="Shaxzod Rustamov">
-        <div class="portrait-hint">
-          <i class="fa-solid fa-expand"></i>
-        </div>
+    <!-- Brend Icon / Logo -->
+    <div class="brand-top reveal">
+      <div class="brand-icon">
+        <i class="fa-solid fa-code"></i>
       </div>
-    </div>
-
-    <!-- 3 Ta Rasmdan Birini Tanlash Paneli -->
-    <div class="photo-selector reveal">
-      <button class="selector-btn active" onclick="setProfileImage(0)" title="1-rasmni o'rnatish">
-        <img src="photo_2026-07-09_10-46-02.jpg" alt="Rasm 1">
-      </button>
-      <button class="selector-btn" onclick="setProfileImage(1)" title="2-rasmni o'rnatish">
-        <img src="image.png" alt="Rasm 2">
-      </button>
-      <button class="selector-btn" onclick="setProfileImage(2)" title="3-rasmni o'rnatish">
-        <img src="photo_2026-09-19_14-25-30.jpg" alt="Rasm 3">
-      </button>
     </div>
 
     <!-- Shaxsiy Ma'lumot -->
@@ -560,7 +332,7 @@
 
     <!-- Havolalar Ro'yxati -->
     <nav class="links">
-      <a class="link reveal" href="https://t.me/Mobilografsamarqand" target="_blank" rel="noopener">
+      <a class="link reveal" href="https://t.me/SH_18_R" target="_blank" rel="noopener">
         <span class="badge"><i class="fa-brands fa-telegram"></i></span>
         <span class="link-text">
           <span class="link-title">Telegram kanalim</span>
@@ -568,7 +340,7 @@
         </span>
       </a>
 
-      <a class="link reveal" href="https://youtube.com/@shaxzodmobil?si=c_gwudzCcrX3az83" target="_blank" rel="noopener">
+      <a class="link reveal" href="https://youtube.com/@shaxcore16" target="_blank" rel="noopener">
         <span class="badge"><i class="fa-brands fa-youtube"></i></span>
         <span class="link-text">
           <span class="link-title">YouTube Kanalim</span>
@@ -576,7 +348,7 @@
         </span>
       </a>
 
-      <a class="link reveal" href="https://www.instagram.com/shaxzod.dev/?__pwa=1#" target="_blank" rel="noopener">
+      <a class="link reveal" href="https://www.instagram.com/whois.rustamov/" target="_blank" rel="noopener">
         <span class="badge"><i class="fa-brands fa-instagram"></i></span>
         <span class="link-text">
           <span class="link-title">Instagram</span>
@@ -584,7 +356,7 @@
         </span>
       </a>
 
-      <a class="link reveal" href="https://t.me/RUSTAMOV016" target="_blank" rel="noopener">
+      <a class="link reveal" href="https://t.me/rstmv18" target="_blank" rel="noopener">
         <span class="badge"><i class="fa-solid fa-paper-plane"></i></span>
         <span class="link-text">
           <span class="link-title">Menga yozing</span>
@@ -601,101 +373,15 @@
   </main>
 </div>
 
-<!-- GALEREYA MODAL OYNASI -->
-<div class="gallery-modal" id="galleryModal">
-  <button class="gallery-close" onclick="closeGallery()"><i class="fa-solid fa-xmark"></i></button>
-  
-  <div class="gallery-content">
-    <button class="gallery-nav gallery-prev" onclick="changeImage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-    <img id="galleryImage" src="" alt="Portfolio rasmi">
-    <button class="gallery-nav gallery-next" onclick="changeImage(1)"><i class="fa-solid fa-chevron-right"></i></button>
-  </div>
-
-  <div class="gallery-counter" id="galleryCounter">1 / 3</div>
-</div>
-
 <div id="toast">Havola nusxalandi!</div>
 
 <script>
-  // RASMLAR RO'YXATI
-  const images = [
-    'photo_2026-07-09_10-46-02.jpg',
-    'image.png',
-    'photo_2026-09-19_14-25-30.jpg'
-  ];
-
-  let currentIndex = 0;
-
-  // PROFILE RASMINI ALMASHTIRISH FUNKSIYASI
-  function setProfileImage(index) {
-    currentIndex = index;
-    const selectedImg = images[index];
-
-    // Asosiy profil rasmi va arka fonni o'zgartirish
-    const mainImg = document.getElementById('mainProfileImg');
-    const bgPhoto = document.getElementById('bgPhoto');
-
-    mainImg.style.opacity = '0';
-    setTimeout(() => {
-      mainImg.src = selectedImg;
-      bgPhoto.style.backgroundImage = `url('${selectedImg}')`;
-      mainImg.style.opacity = '1';
-    }, 200);
-
-    // Tugmalar aktivligini belgilash
-    const buttons = document.querySelectorAll('.selector-btn');
-    buttons.forEach((btn, idx) => {
-      if (idx === index) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    showToast(`${index + 1}-rasm tanlandi!`);
-  }
-
-  function openGallery(index) {
-    currentIndex = index;
-    updateGallery();
-    document.getElementById('galleryModal').classList.add('active');
-  }
-
-  function closeGallery() {
-    document.getElementById('galleryModal').classList.remove('active');
-  }
-
-  function changeImage(direction) {
-    currentIndex += direction;
-    if (currentIndex < 0) currentIndex = images.length - 1;
-    if (currentIndex >= images.length) currentIndex = 0;
-    updateGallery();
-  }
-
-  function updateGallery() {
-    const imgElement = document.getElementById('galleryImage');
-    const counterElement = document.getElementById('galleryCounter');
-    
-    imgElement.src = images[currentIndex];
-    counterElement.textContent = `${currentIndex + 1} / ${images.length}`;
-  }
-
   function showToast(text) {
     const toast = document.getElementById('toast');
     toast.textContent = text;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
-
-  // Klaviatura orqali boshqarish
-  document.addEventListener('keydown', (e) => {
-    const modal = document.getElementById('galleryModal');
-    if (modal.classList.contains('active')) {
-      if (e.key === 'Escape') closeGallery();
-      if (e.key === 'ArrowLeft') changeImage(-1);
-      if (e.key === 'ArrowRight') changeImage(1);
-    }
-  });
 
   // Ulashish va Copy mantiq
   async function handleShare() {
